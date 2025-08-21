@@ -15,7 +15,7 @@ export async function onRequest(context) {
       const SF_LON = -122.4194;
       
       // Check if we have cached data that hasn't expired
-      const cacheKey = `fogcast-${SF_LAT}-${SF_LON}`;
+      const cacheKey = `https://cache.fogcast.local/weather-${SF_LAT}-${SF_LON}`;
       const cache = await caches.open('yr-no-weather');
       const cachedResponse = await cache.match(cacheKey);
       

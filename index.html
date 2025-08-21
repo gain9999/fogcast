@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fogcast API</title>
+    <meta charset="utf-8">
+</head>
+<body>
+    <h1>Fogcast API</h1>
+    <p>San Francisco fog forecast API powered by yr.no</p>
+    <p>Usage: <code>curl https://fogcast.pages.dev/api</code></p>
+    <pre id="demo"></pre>
+    
+    <script>
+        fetch('/api')
+            .then(r => r.json())
+            .then(data => {
+                document.getElementById('demo').textContent = JSON.stringify(data, null, 2);
+            });
+    </script>
+</body>
+</html>

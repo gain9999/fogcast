@@ -1,5 +1,5 @@
-export default {
-  async fetch(request, env, ctx) {
+export async function onRequest(context) {
+  const { request, env, ctx } = context;
     const corsHeaders = {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET, OPTIONS',
@@ -51,8 +51,7 @@ export default {
         }
       });
     }
-  }
-};
+}
 
 function extractFogForecast(data) {
   const now = new Date().toISOString();

@@ -18,7 +18,7 @@ export default {
         `https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=${SF_LAT}&lon=${SF_LON}`,
         {
           headers: {
-            'User-Agent': 'fogcast/1.0 (github.com/user/fogcast)'
+            'User-Agent': 'fogcast/1.0 (https://github.com/gain9999/fogcast) contact@example.com'
           }
         }
       );
@@ -37,9 +37,12 @@ export default {
         }
       });
     } catch (error) {
+      console.error('API Error:', error);
       return new Response(JSON.stringify({ 
         error: 'Failed to fetch fog forecast',
-        message: error.message 
+        message: error.message,
+        stack: error.stack,
+        timestamp: new Date().toISOString()
       }), {
         status: 500,
         headers: {

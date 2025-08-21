@@ -1,0 +1,13 @@
+{
+  "name": "fogcast",
+  "version": "1.0.0",
+  "description": "A curl API tool for fog forecasts in San Francisco",
+  "main": "functions/api/index.js",
+  "scripts": {
+    "dev": "npx wrangler pages dev",
+    "deploy": "npx wrangler pages deploy"
+  },
+  "devDependencies": {
+    "wrangler": "^3.0.0"
+  }
+}

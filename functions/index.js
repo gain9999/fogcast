@@ -152,9 +152,9 @@ function extractFogForecast(data) {
 }
 
 function getFogStatus(fogFraction) {
-  if (fogFraction >= 75) return "Heavy fog";
-  if (fogFraction >= 50) return "Moderate fog";
-  if (fogFraction >= 25) return "Light fog";
-  if (fogFraction > 0) return "Patches of fog";
-  return "Clear";
+  if (fogFraction >= 75) return "Heavy fog 🌫️";
+  if (fogFraction >= 50) return "Moderate fog 🌁";
+  if (fogFraction >= 25) return "Light fog ⛅";
+  if (fogFraction > 0) return "Patches of fog 🌤️";
+  return "Clear ☀️";
 }

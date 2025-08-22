@@ -11,8 +11,8 @@ export async function onRequest(context) {
     }
 
     try {
-      const SF_LAT = 37.7749;
-      const SF_LON = -122.4194;
+      const SF_LAT = 37.80734;
+      const SF_LON = -122.47477;
       
       // Check if we have cached data that hasn't expired
       const cacheKey = `https://cache.fogcast.local/weather-${SF_LAT}-${SF_LON}`;
@@ -112,8 +112,8 @@ function extractFogForecast(data) {
   });
 
   return {
-    location: "San Francisco, CA",
-    coordinates: { lat: 37.7749, lon: -122.4194 },
+    location: "Golden Gate Bridge Vista Point South, San Francisco",
+    coordinates: { lat: 37.80734, lon: -122.47477 },
     updated: now,
     current: {
       fog_area_fraction: currentDetails.fog_area_fraction || 0,

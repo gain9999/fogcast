@@ -94,7 +94,9 @@ function extractFogForecast(data) {
     const dayOffset = Math.floor((entryDate - startDate) / msPerDay);
     
     if (dayOffset >= 1 && dayOffset <= 8) { // Days 1-8, skip day 0 and day 9
-      const hour = entryDate.getUTCHours();
+      // Convert to Pacific Time for accurate morning/afternoon/night classification
+      const pacificTime = new Date(entryDate.toLocaleString("en-US", {timeZone: "America/Los_Angeles"}));
+      const hour = pacificTime.getHours();
       let timeOfDay;
       
       if (hour >= 6 && hour < 12) {

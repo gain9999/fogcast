@@ -101,13 +101,29 @@ function extractFogForecast(data) {
   const forecast24h = timeseries.slice(0, 24);
   
   const currentDetails = current.data.instant.details;
-  const fogForecast = forecast24h.map(entry => {
+  const fogForecast = forecast24h.map((entry, index) => {
     const details = entry.data.instant.details;
+    const entryDate = new Date(entry.time);
+    const dayOfYear = Math.floor((entryDate - new Date(entryDate.getFullYear(), 0, 0)) / (1000 * 60 * 60 * 24));
+    const isNight = entryDate.getUTCHours() < 6 || entryDate.getUTCHours() >= 18;
+    const timeOfDay = isNight ? 'night' : 'day';
+    
+    // Get symbol data from next_1_hours or next_6_hours
+    const next1h = entry.data.next_1_hours;
+    const next6h = entry.data.next_6_hours;
+    const symbolData = next1h || next6h;
+    
     return {
       time: entry.time,
+      hours_ahead: index,
+      [`forecast_${dayOfYear}${timeOfDay[0]}`]: {
+        symbol_code: symbolData?.summary?.symbol_code || null,
+        symbol_confidence: symbolData?.summary?.symbol_confidence || null
+      },
       fog_area_fraction: details.fog_area_fraction || 0,
       relative_humidity: details.relative_humidity,
-      cloud_area_fraction: details.cloud_area_fraction
+      cloud_area_fraction: details.cloud_area_fraction,
+      visibility_status: getFogStatus(details.fog_area_fraction || 0)
     };
   });
 

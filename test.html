@@ -112,7 +112,12 @@
 <body>
     <div class="container">
         <h1>🌫️ Fog Forecast API Test</h1>
-        <button onclick="fetchData()" style="padding: 10px 20px; font-size: 16px; margin-bottom: 20px;">Refresh Data</button>
+        <div style="margin-bottom: 20px;">
+            <label for="api-url" style="display: block; margin-bottom: 5px; font-weight: bold;">API URL:</label>
+            <input type="text" id="api-url" placeholder="Enter API URL (e.g., https://fogcast.pages.dev/ or http://localhost:8788/)" 
+                   style="width: 60%; padding: 8px; margin-right: 10px;" value="https://fogcast.pages.dev/">
+            <button onclick="fetchData()" style="padding: 8px 20px; font-size: 16px;">Fetch Data</button>
+        </div>
         
         <div id="loading" class="loading" style="display: none;">Loading fog forecast data...</div>
         <div id="error" class="error" style="display: none;"></div>
@@ -162,7 +167,12 @@
             content.style.display = 'none';
             
             try {
-                const response = await fetch('/');
+                const apiUrl = document.getElementById('api-url').value.trim();
+                if (!apiUrl) {
+                    throw new Error('Please enter an API URL');
+                }
+                
+                const response = await fetch(apiUrl);
                 if (!response.ok) {
                     throw new Error(`HTTP ${response.status}: ${response.statusText}`);
                 }

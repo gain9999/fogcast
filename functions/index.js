@@ -95,13 +95,14 @@ function extractFogForecast(data) {
     
     if (dayOffset >= 1 && dayOffset <= 8) { // Days 1-8, skip day 0 and day 9
       // Convert to Pacific Time for accurate morning/afternoon/night classification
-      const pacificTime = new Date(entryDate.toLocaleString("en-US", {timeZone: "America/Los_Angeles"}));
-      const hour = pacificTime.getHours();
+      const utcHour = entryDate.getUTCHours();
+      // Pacific Time is UTC-8 (PST) or UTC-7 (PDT) - currently PDT in August
+      const pacificHour = (utcHour - 7 + 24) % 24;
       let timeOfDay;
       
-      if (hour >= 6 && hour < 12) {
+      if (pacificHour >= 6 && pacificHour < 12) {
         timeOfDay = 'morning';
-      } else if (hour >= 12 && hour < 18) {
+      } else if (pacificHour >= 12 && pacificHour < 18) {
         timeOfDay = 'afternoon';
       } else {
         timeOfDay = 'night';

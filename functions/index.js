@@ -75,11 +75,11 @@ function extractFogForecast(data) {
     const details = entry.data.instant.details;
     
     return {
+      visibility_status: getFogStatus(details.fog_area_fraction || 0),
       hours_ahead: index + 1,
       fog_area_fraction: details.fog_area_fraction || 0,
       relative_humidity: details.relative_humidity,
-      cloud_area_fraction: details.cloud_area_fraction,
-      visibility_status: getFogStatus(details.fog_area_fraction || 0)
+      cloud_area_fraction: details.cloud_area_fraction
     };
   });
   

@@ -133,8 +133,7 @@ function extractFogForecast(data) {
   return {
     location: "Golden Gate Bridge Vista Point South, San Francisco",
     coordinates: { lat: 37.80734, lon: -122.47477 },
-    updated: now,
-    updated_local: nowLocal,
+    updated: nowLocal,
     current: {
       fog_area_fraction: currentDetails.fog_area_fraction || 0,
       relative_humidity: currentDetails.relative_humidity,

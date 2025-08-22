@@ -103,28 +103,42 @@ function extractFogForecast(data) {
   const currentDetails = current.data.instant.details;
   const fogForecast = forecast24h.map((entry, index) => {
     const details = entry.data.instant.details;
-    const entryDate = new Date(entry.time);
-    const dayOfYear = Math.floor((entryDate - new Date(entryDate.getFullYear(), 0, 0)) / (1000 * 60 * 60 * 24));
-    const isNight = entryDate.getUTCHours() < 6 || entryDate.getUTCHours() >= 18;
-    const timeOfDay = isNight ? 'night' : 'day';
-    
-    // Get symbol data from next_1_hours or next_6_hours
-    const next1h = entry.data.next_1_hours;
-    const next6h = entry.data.next_6_hours;
-    const symbolData = next1h || next6h;
     
     return {
       time: entry.time,
       hours_ahead: index,
-      [`forecast_${dayOfYear}${timeOfDay[0]}`]: {
-        symbol_code: symbolData?.summary?.symbol_code || null,
-        symbol_confidence: symbolData?.summary?.symbol_confidence || null
-      },
       fog_area_fraction: details.fog_area_fraction || 0,
       relative_humidity: details.relative_humidity,
       cloud_area_fraction: details.cloud_area_fraction,
       visibility_status: getFogStatus(details.fog_area_fraction || 0)
     };
+  });
+  
+  // Create day-based forecasts
+  const dayForecasts = {};
+  const startDate = new Date(timeseries[0].time);
+  const msPerDay = 24 * 60 * 60 * 1000;
+  
+  // Group entries by day and extract day/night symbols
+  timeseries.forEach((entry, index) => {
+    const entryDate = new Date(entry.time);
+    const dayOffset = Math.floor((entryDate - startDate) / msPerDay);
+    
+    if (dayOffset >= 0 && dayOffset <= 9) { // Up to 9 days
+      const hour = entryDate.getUTCHours();
+      const isDay = hour >= 6 && hour < 18;
+      const timeOfDay = isDay ? 'day' : 'night';
+      
+      if (!dayForecasts[`forecast_${dayOffset}d`]) {
+        dayForecasts[`forecast_${dayOffset}d`] = {};
+      }
+      
+      // Get symbol from next_1_hours, next_6_hours, or next_12_hours
+      const symbolData = entry.data.next_1_hours || entry.data.next_6_hours || entry.data.next_12_hours;
+      if (symbolData?.summary?.symbol_code && !dayForecasts[`forecast_${dayOffset}d`][timeOfDay]) {
+        dayForecasts[`forecast_${dayOffset}d`][timeOfDay] = symbolData.summary.symbol_code;
+      }
+    }
   });
 
   return {
@@ -137,7 +151,8 @@ function extractFogForecast(data) {
       cloud_area_fraction: currentDetails.cloud_area_fraction,
       visibility_status: getFogStatus(currentDetails.fog_area_fraction || 0)
     },
-    forecast_24h: fogForecast
+    forecast_24h: fogForecast,
+    ...dayForecasts
   };
 }
 

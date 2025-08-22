@@ -81,8 +81,8 @@ function extractFogForecast(data) {
     });
     
     return {
-      status: getFogStatus(details.fog_area_fraction || 0),
       time: pacificTime,
+      status: getFogStatus(details.fog_area_fraction || 0),
       fog_area_fraction: details.fog_area_fraction || 0,
       relative_humidity: details.relative_humidity,
       cloud_area_fraction: details.cloud_area_fraction

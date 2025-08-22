@@ -115,7 +115,6 @@ function extractFogForecast(data) {
     const details = entry.data.instant.details;
     
     return {
-      time: entry.time,
       hours_ahead: index,
       fog_area_fraction: details.fog_area_fraction || 0,
       relative_humidity: details.relative_humidity,

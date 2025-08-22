@@ -111,11 +111,11 @@ function extractFogForecast(data) {
   const forecast24h = timeseries.slice(0, 24);
   
   const currentDetails = current.data.instant.details;
-  const fogForecast = forecast24h.map((entry, index) => {
+  const fogForecast = forecast24h.slice(1).map((entry, index) => {
     const details = entry.data.instant.details;
     
     return {
-      hours_ahead: index,
+      hours_ahead: index + 1,
       fog_area_fraction: details.fog_area_fraction || 0,
       relative_humidity: details.relative_humidity,
       cloud_area_fraction: details.cloud_area_fraction,
@@ -133,7 +133,7 @@ function extractFogForecast(data) {
     const entryDate = new Date(entry.time);
     const dayOffset = Math.floor((entryDate - startDate) / msPerDay);
     
-    if (dayOffset >= 0 && dayOffset <= 9) { // Up to 9 days
+    if (dayOffset >= 1 && dayOffset <= 8) { // Days 1-8, skip day 0 and day 9
       const hour = entryDate.getUTCHours();
       let timeOfDay;
       

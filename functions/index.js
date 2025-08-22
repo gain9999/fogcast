@@ -141,10 +141,10 @@ function extractFogForecast(data) {
     coordinates: { lat: 37.80734, lon: -122.47477 },
     updated: nowLocal,
     current: {
+      status: getFogStatus(currentDetails.fog_area_fraction || 0),
       fog_area_fraction: currentDetails.fog_area_fraction || 0,
       relative_humidity: currentDetails.relative_humidity,
-      cloud_area_fraction: currentDetails.cloud_area_fraction,
-      status: getFogStatus(currentDetails.fog_area_fraction || 0)
+      cloud_area_fraction: currentDetails.cloud_area_fraction
     },
     forecast_24h: fogForecast,
     ...dayForecasts

@@ -14,39 +14,14 @@ export async function onRequest(context) {
       const SF_LAT = 37.80734;
       const SF_LON = -122.47477;
       
-      // Check if we have cached data that hasn't expired
-      const cacheKey = `https://cache.fogcast.local/weather-${SF_LAT}-${SF_LON}`;
-      const cache = await caches.open('yr-no-weather');
-      const cachedResponse = await cache.match(cacheKey);
-      
-      let requestHeaders = {
-        'User-Agent': 'fogcast/1.0 (https://github.com/gain9999/fogcast) contact@example.com'
-      };
-      
-      // If we have cached data, use If-Modified-Since for conditional request
-      if (cachedResponse) {
-        const lastModified = cachedResponse.headers.get('Last-Modified');
-        if (lastModified) {
-          requestHeaders['If-Modified-Since'] = lastModified;
-        }
-      }
-      
       const response = await fetch(
         `https://api.met.no/weatherapi/locationforecast/2.0/complete?lat=${SF_LAT}&lon=${SF_LON}`,
-        { headers: requestHeaders }
-      );
-
-      if (response.status === 304 && cachedResponse) {
-        // Data hasn't changed, return cached response
-        const cachedData = await cachedResponse.json();
-        return new Response(JSON.stringify(cachedData, null, 2), {
+        { 
           headers: {
-            'Content-Type': 'application/json',
-            'Cache-Control': 'public, max-age=1800', // 30 minutes
-            ...corsHeaders
+            'User-Agent': 'fogcast/1.0 (https://github.com/gain9999/fogcast) contact@example.com'
           }
-        });
-      }
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`Yr.no API error: ${response.status}`);
@@ -54,25 +29,10 @@ export async function onRequest(context) {
 
       const data = await response.json();
       const forecast = extractFogForecast(data);
-      
-      // Cache the response respecting Expires header from yr.no
-      const expires = response.headers.get('Expires');
-      const lastModified = response.headers.get('Last-Modified');
-      
-      const cacheResponse = new Response(JSON.stringify(forecast), {
-        headers: {
-          'Last-Modified': lastModified || new Date().toUTCString(),
-          'Expires': expires || new Date(Date.now() + 3600000).toUTCString() // 1 hour default
-        }
-      });
-      
-      await cache.put(cacheKey, cacheResponse.clone());
 
       return new Response(JSON.stringify(forecast, null, 2), {
         headers: {
           'Content-Type': 'application/json',
-          'Cache-Control': 'public, max-age=1800', // 30 minutes
-          'Expires': expires || new Date(Date.now() + 1800000).toUTCString(), // 30 minutes
           ...corsHeaders
         }
       });

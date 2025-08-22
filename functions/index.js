@@ -82,10 +82,10 @@ function extractFogForecast(data) {
     
     return {
       time: pacificTime,
-      status: getFogStatus(details.fog_area_fraction || 0),
       fog_area_fraction: details.fog_area_fraction || 0,
       relative_humidity: details.relative_humidity,
-      cloud_area_fraction: details.cloud_area_fraction
+      cloud_area_fraction: details.cloud_area_fraction,
+      status: getFogStatus(details.fog_area_fraction || 0)
     };
   });
   
@@ -141,10 +141,10 @@ function extractFogForecast(data) {
     coordinates: { lat: 37.80734, lon: -122.47477 },
     updated: nowLocal,
     current: {
-      status: getFogStatus(currentDetails.fog_area_fraction || 0),
       fog_area_fraction: currentDetails.fog_area_fraction || 0,
       relative_humidity: currentDetails.relative_humidity,
-      cloud_area_fraction: currentDetails.cloud_area_fraction
+      cloud_area_fraction: currentDetails.cloud_area_fraction,
+      status: getFogStatus(currentDetails.fog_area_fraction || 0)
     },
     forecast_24h: fogForecast,
     ...dayForecasts

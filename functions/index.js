@@ -32,7 +32,7 @@ export async function onRequest(context) {
       }
       
       const response = await fetch(
-        `https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=${SF_LAT}&lon=${SF_LON}`,
+        `https://api.met.no/weatherapi/locationforecast/2.0/complete?lat=${SF_LAT}&lon=${SF_LON}`,
         { headers: requestHeaders }
       );
 

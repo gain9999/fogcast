@@ -1,0 +1,74 @@
+# Robots.txt for Fog Forecast API
+# AI and bot friendly - allowing access to fog forecast data
+
+User-agent: *
+Allow: /
+
+# Explicitly allow AI crawlers and bots
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: OpenAI-SearchBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: YouBot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# Weather and research bots
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+# Research and academic crawlers
+User-agent: ia_archiver
+Allow: /
+
+User-agent: archive.org_bot
+Allow: /
+
+User-agent: SemrushBot
+Allow: /
+
+User-agent: AhrefsBot
+Allow: /
+
+# No restrictions - all bots welcome to access fog forecast data
+# This API provides public weather information that benefits from wide accessibility
+
+Sitemap: https://fogcast.in/sitemap.xml
+
+# Cache recommendations for efficient crawling
+# API responses are updated hourly with fresh weather data
+# Recommended crawl frequency: 1-2 times per hour maximum

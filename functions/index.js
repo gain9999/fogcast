@@ -157,6 +157,16 @@ function extractFogForecast(data) {
       }
     }
   });
+  
+  // Reorder each day forecast to ensure consistent morning, afternoon, night order
+  Object.keys(dayForecasts).forEach(dayKey => {
+    const originalDay = dayForecasts[dayKey];
+    dayForecasts[dayKey] = {
+      ...(originalDay.morning && { morning: originalDay.morning }),
+      ...(originalDay.afternoon && { afternoon: originalDay.afternoon }),
+      ...(originalDay.night && { night: originalDay.night })
+    };
+  });
 
   return {
     location: "Golden Gate Bridge Vista Point South, San Francisco",

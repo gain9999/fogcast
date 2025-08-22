@@ -73,10 +73,16 @@ function extractFogForecast(data) {
   const currentDetails = current.data.instant.details;
   const fogForecast = forecast24h.slice(1).map((entry, index) => {
     const details = entry.data.instant.details;
+    const entryTime = new Date(entry.time);
+    const pacificTime = entryTime.toLocaleString('en-US', {
+      timeZone: 'America/Los_Angeles',
+      hour: 'numeric',
+      minute: '2-digit'
+    });
     
     return {
-      visibility_status: getFogStatus(details.fog_area_fraction || 0),
-      hours_ahead: index + 1,
+      status: getFogStatus(details.fog_area_fraction || 0),
+      time: pacificTime,
       fog_area_fraction: details.fog_area_fraction || 0,
       relative_humidity: details.relative_humidity,
       cloud_area_fraction: details.cloud_area_fraction
@@ -138,7 +144,7 @@ function extractFogForecast(data) {
       fog_area_fraction: currentDetails.fog_area_fraction || 0,
       relative_humidity: currentDetails.relative_humidity,
       cloud_area_fraction: currentDetails.cloud_area_fraction,
-      visibility_status: getFogStatus(currentDetails.fog_area_fraction || 0)
+      status: getFogStatus(currentDetails.fog_area_fraction || 0)
     },
     forecast_24h: fogForecast,
     ...dayForecasts

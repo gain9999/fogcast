@@ -95,6 +95,16 @@ export async function onRequest(context) {
 
 function extractFogForecast(data) {
   const now = new Date().toISOString();
+  const nowLocal = new Date().toLocaleString('en-US', {
+    timeZone: 'America/Los_Angeles',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+    second: '2-digit',
+    timeZoneName: 'short'
+  });
   const timeseries = data.properties.timeseries;
   
   const current = timeseries[0];
@@ -126,8 +136,15 @@ function extractFogForecast(data) {
     
     if (dayOffset >= 0 && dayOffset <= 9) { // Up to 9 days
       const hour = entryDate.getUTCHours();
-      const isDay = hour >= 6 && hour < 18;
-      const timeOfDay = isDay ? 'day' : 'night';
+      let timeOfDay;
+      
+      if (hour >= 6 && hour < 12) {
+        timeOfDay = 'morning';
+      } else if (hour >= 12 && hour < 18) {
+        timeOfDay = 'afternoon';
+      } else {
+        timeOfDay = 'night';
+      }
       
       if (!dayForecasts[`forecast_${dayOffset}d`]) {
         dayForecasts[`forecast_${dayOffset}d`] = {};
@@ -145,6 +162,7 @@ function extractFogForecast(data) {
     location: "Golden Gate Bridge Vista Point South, San Francisco",
     coordinates: { lat: 37.80734, lon: -122.47477 },
     updated: now,
+    updated_local: nowLocal,
     current: {
       fog_area_fraction: currentDetails.fog_area_fraction || 0,
       relative_humidity: currentDetails.relative_humidity,

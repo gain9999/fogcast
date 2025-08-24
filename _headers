@@ -1,0 +1,5 @@
+/api/*
+  Cache-Control: public, max-age=600, s-maxage=600
+  
+/*
+  Cache-Control: public, max-age=86400

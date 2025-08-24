@@ -121,7 +121,8 @@ function extractFogForecast(data) {
       // Get symbol from next_1_hours, next_6_hours, or next_12_hours
       const symbolData = entry.data.next_1_hours || entry.data.next_6_hours || entry.data.next_12_hours;
       if (symbolData?.summary?.symbol_code && !dayForecasts[`forecast_${dayOffset}d`][timeOfDay]) {
-        dayForecasts[`forecast_${dayOffset}d`][timeOfDay] = symbolData.summary.symbol_code;
+        const symbolCode = symbolData.summary.symbol_code.replace(/_day|_night/, '');
+        dayForecasts[`forecast_${dayOffset}d`][timeOfDay] = symbolCode;
       }
     }
   });

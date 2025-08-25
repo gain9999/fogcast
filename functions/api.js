@@ -33,6 +33,7 @@ export async function onRequest(context) {
     return new Response(JSON.stringify(forecast, null, 2), {
       headers: {
         'Content-Type': 'application/json',
+        'Cache-Control': 'public, max-age=600, s-maxage=600',
         ...corsHeaders
       }
     });

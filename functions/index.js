@@ -284,6 +284,22 @@ function generateHTML(forecast) {
             color: #495057;
             text-transform: capitalize;
         }
+        .see-more-link {
+            text-align: center;
+            margin: 15px 0;
+            cursor: pointer;
+            color: #3498db;
+            font-weight: 500;
+            padding: 10px;
+            border-radius: 6px;
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            transition: all 0.2s ease;
+        }
+        .see-more-link:hover {
+            background: #e9ecef;
+            color: #2980b9;
+        }
         @media (max-width: 600px) {
             body { padding: 15px; }
             h1 { font-size: 2rem; }
@@ -314,12 +330,25 @@ function generateHTML(forecast) {
         <section>
             <h3>⏰ 24-Hour Fog Forecast</h3>
             <p>Plan your Golden Gate Bridge visit with hourly fog predictions:</p>
-            ${forecast.forecast_24h.map(item => `
-                <article class="forecast-item">
-                    <strong>${item.time}</strong> - ${item.status}
-                    <br>🌫️ Fog: ${item.fog_area_fraction}% | 💧 Humidity: ${item.relative_humidity}%
-                </article>
-            `).join('')}
+            <div id="forecast-container">
+                ${forecast.forecast_24h.slice(0, 6).map(item => `
+                    <article class="forecast-item">
+                        <strong>${item.time}</strong> - ${item.status}
+                        <br>🌫️ Fog: ${item.fog_area_fraction}% | 💧 Humidity: ${item.relative_humidity}%
+                    </article>
+                `).join('')}
+                <div id="remaining-forecast" style="display: none;">
+                    ${forecast.forecast_24h.slice(6).map(item => `
+                        <article class="forecast-item">
+                            <strong>${item.time}</strong> - ${item.status}
+                            <br>🌫️ Fog: ${item.fog_area_fraction}% | 💧 Humidity: ${item.relative_humidity}%
+                        </article>
+                    `).join('')}
+                </div>
+                <div id="see-more" class="see-more-link" onclick="toggleForecast()">
+                    <span id="see-more-text">See more (${forecast.forecast_24h.length - 6} hours)</span>
+                </div>
+            </div>
         </section>
 
         <section>
@@ -365,6 +394,21 @@ function generateHTML(forecast) {
         <p><small>📊 Weather data provided by <a href="https://yr.no" rel="noopener" target="_blank">Yr.no</a> (Norwegian Meteorological Institute)</small></p>
         <p><small>🌉 Helping visitors find the best times to view the Golden Gate Bridge since 2024</small></p>
     </footer>
+
+    <script>
+        function toggleForecast() {
+            const remainingForecast = document.getElementById('remaining-forecast');
+            const seeMoreText = document.getElementById('see-more-text');
+            
+            if (remainingForecast.style.display === 'none') {
+                remainingForecast.style.display = 'block';
+                seeMoreText.textContent = 'Show less';
+            } else {
+                remainingForecast.style.display = 'none';
+                seeMoreText.textContent = 'See more (' + ${forecast.forecast_24h.length - 6} + ' hours)';
+            }
+        }
+    </script>
 </body>
 </html>`;
 }

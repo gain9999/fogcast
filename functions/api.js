@@ -55,8 +55,8 @@ export async function onRequest(context) {
 
 function extractFogForecast(data) {
   const timeseries = data.properties.timeseries;
-  const firstEntryTime = new Date(timeseries[0].time);
-  const nowLocal = firstEntryTime.toLocaleString('en-US', {
+  const updatedTime = new Date(data.properties.meta.updated_at);
+  const nowLocal = updatedTime.toLocaleString('en-US', {
     timeZone: 'America/Los_Angeles',
     year: 'numeric',
     month: 'long',

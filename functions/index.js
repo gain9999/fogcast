@@ -89,6 +89,13 @@ function generateHTML(forecast) {
     "@type": "WeatherForecast",
     "name": "Golden Gate Bridge Vista Point Fog Forecast",
     "description": "Real-time fog forecast for Golden Gate Bridge Vista Point in San Francisco",
+    "about": {
+      "@type": "Place",
+      "@id": "https://fogcast.in#golden-gate-bridge-vista-point",
+      "name": "Golden Gate Bridge Vista Point",
+      "alternateName": ["Marin Headlands Vista Point", "Battery Spencer Overlook"],
+      "description": "Popular viewpoint for Golden Gate Bridge photography and sightseeing"
+    },
     "location": {
       "@type": "Place",
       "name": forecast.location,
@@ -99,15 +106,18 @@ function generateHTML(forecast) {
       },
       "address": {
         "@type": "PostalAddress",
-        "addressLocality": "San Francisco",
+        "streetAddress": "Conzelman Rd",
+        "addressLocality": "Sausalito",
         "addressRegion": "CA",
+        "postalCode": "94965",
         "addressCountry": "US"
       }
     },
     "dateModified": forecast.updated,
     "provider": {
       "@type": "Organization",
-      "name": "Yr.no",
+      "name": "Norwegian Meteorological Institute",
+      "alternateName": "Yr.no",
       "url": "https://yr.no"
     },
     "mainEntity": {
@@ -118,15 +128,31 @@ function generateHTML(forecast) {
           "@type": "QuantitativeValue",
           "name": "Fog Coverage",
           "value": forecast.current.fog_area_fraction,
-          "unitText": "percent"
+          "unitText": "percent",
+          "description": "Percentage of area covered by fog affecting Golden Gate Bridge visibility"
         },
         {
           "@type": "QuantitativeValue", 
           "name": "Relative Humidity",
           "value": forecast.current.relative_humidity,
           "unitText": "percent"
+        },
+        {
+          "@type": "QuantitativeValue", 
+          "name": "Cloud Coverage",
+          "value": forecast.current.cloud_area_fraction,
+          "unitText": "percent"
         }
       ]
+    },
+    "temporalCoverage": "P1D",
+    "spatialCoverage": {
+      "@type": "Place",
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": forecast.coordinates.lat,
+        "longitude": forecast.coordinates.lon
+      }
     }
   };
 
@@ -136,8 +162,8 @@ function generateHTML(forecast) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fog Forecast Golden Gate Bridge Vista Point | Current: ${forecast.current.status} | San Francisco Weather</title>
-    <meta name="description" content="Real-time fog forecast for Golden Gate Bridge Vista Point in San Francisco. Current conditions: ${forecast.current.status} (${forecast.current.fog_area_fraction}% fog coverage). Get 24-hour predictions for the best viewing times and photography opportunities.">
-    <meta name="keywords" content="fog forecast, Golden Gate Bridge, San Francisco fog, weather visibility, bridge viewing, photography, tourism, vista point">
+    <meta name="description" content="Real-time Golden Gate Bridge fog forecast for Vista Point, San Francisco. Current: ${forecast.current.status} (${forecast.current.fog_area_fraction}% fog coverage). Hourly predictions for optimal bridge photography and sightseeing. Live weather data from Marin Headlands viewpoint.">
+    <meta name="keywords" content="Golden Gate Bridge fog forecast, San Francisco fog prediction, bridge visibility weather, Marin Headlands vista point, SF fog conditions, bridge photography weather, tourist viewing conditions, Golden Gate weather radar, SF bay fog, bridge webcam alternative">
     <meta name="author" content="FogCast">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://fogcast.in">
@@ -318,17 +344,19 @@ function generateHTML(forecast) {
         <p class="updated"><strong>🕒 Last Updated:</strong> ${forecast.updated}</p>
     </header>
     
-    <main>
-        <section class="current">
-            <h3>🌡️ Current Fog Conditions</h3>
-            <div class="status">${forecast.current.status}</div>
-            <p><strong>Fog Coverage:</strong> <span class="highlight">${forecast.current.fog_area_fraction}%</span></p>
-            <p><strong>Relative Humidity:</strong> ${forecast.current.relative_humidity}%</p>
-            <p><strong>Cloud Coverage:</strong> ${forecast.current.cloud_area_fraction}%</p>
+    <main role="main">
+        <section class="current" aria-labelledby="current-conditions">
+            <h3 id="current-conditions">🌡️ Current Fog Conditions</h3>
+            <div class="status" role="status" aria-live="polite">${forecast.current.status}</div>
+            <div itemscope itemtype="https://schema.org/WeatherObservation">
+                <p><strong>Fog Coverage:</strong> <span class="highlight" itemprop="measuredValue" itemscope itemtype="https://schema.org/QuantitativeValue"><span itemprop="value">${forecast.current.fog_area_fraction}</span><span itemprop="unitText">%</span></span></p>
+                <p><strong>Relative Humidity:</strong> <span itemprop="measuredValue" itemscope itemtype="https://schema.org/QuantitativeValue"><span itemprop="value">${forecast.current.relative_humidity}</span><span itemprop="unitText">%</span></span></p>
+                <p><strong>Cloud Coverage:</strong> <span itemprop="measuredValue" itemscope itemtype="https://schema.org/QuantitativeValue"><span itemprop="value">${forecast.current.cloud_area_fraction}</span><span itemprop="unitText">%</span></span></p>
+            </div>
         </section>
 
-        <section>
-            <h3>⏰ 24-Hour Fog Forecast</h3>
+        <section aria-labelledby="hourly-forecast-heading">
+            <h3 id="hourly-forecast-heading">⏰ 24-Hour Fog Forecast</h3>
             <p>Plan your Golden Gate Bridge visit with hourly fog predictions:</p>
             <div id="forecast-container">
                 ${forecast.forecast_24h.slice(0, 6).map(item => `
@@ -351,8 +379,8 @@ function generateHTML(forecast) {
             </div>
         </section>
 
-        <section>
-            <h3>📅 Extended Forecast (Next 8 Days)</h3>
+        <section aria-labelledby="extended-forecast-heading">
+            <h3 id="extended-forecast-heading">📅 Extended Forecast (Next 8 Days)</h3>
             <p>Weather symbols for morning, afternoon, and night periods:</p>
             <div class="extended-forecast">
                 ${Object.keys(forecast).filter(key => key.startsWith('forecast_') && key !== 'forecast_24h').sort().map(dayKey => {
@@ -375,12 +403,14 @@ function generateHTML(forecast) {
             </div>
         </section>
 
-        <section class="faq">
-            <h3>❓ About This Forecast</h3>
-            <p><strong>What does fog coverage mean?</strong> Fog coverage indicates the percentage of the area covered by fog. Higher percentages mean reduced visibility of the Golden Gate Bridge.</p>
+        <aside class="faq" role="complementary" aria-labelledby="about-forecast">
+            <h3 id="about-forecast">❓ About This Forecast</h3>
+            <div itemscope itemtype="https://schema.org/DefinedTerm">
+                <p><strong itemprop="name">What does fog coverage mean?</strong> <span itemprop="description">Fog coverage indicates the percentage of the area covered by fog. Higher percentages mean reduced visibility of the Golden Gate Bridge.</span></p>
+            </div>
             <p><strong>Best viewing times:</strong> Look for periods with <strong>0-25% fog coverage</strong> for the clearest bridge views and photography opportunities.</p>
-            <p><strong>Data source:</strong> Weather data provided by the Norwegian Meteorological Institute (Yr.no), updated hourly.</p>
-        </section>
+            <p><strong>Data source:</strong> Weather data provided by the <a href="https://yr.no" rel="noopener" target="_blank">Norwegian Meteorological Institute (Yr.no)</a>, updated hourly.</p>
+        </aside>
 
         <section class="api-link">
             <h3>🔗 Developer API Access</h3>

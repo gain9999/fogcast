@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Allow: /api
+
+# Sitemap location
+Sitemap: https://fogcast.in/sitemap.xml
+
+# Crawl delay (optional - helps prevent overloading during frequent updates)
+Crawl-delay: 1

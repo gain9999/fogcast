@@ -438,9 +438,9 @@ function generateHTML(forecast) {
                         <div class="day-forecast">
                             <h4>Day ${dayNumber} - ${dayName}</h4>
                             <div class="day-periods">
-                                ${dayData.morning ? `<div class="period"><span class="period-label">🌅 Morning:</span> <span class="weather-symbol">${formatWeatherSymbol(dayData.morning)}</span></div>` : ''}
-                                ${dayData.afternoon ? `<div class="period"><span class="period-label">☀️ Afternoon:</span> <span class="weather-symbol">${formatWeatherSymbol(dayData.afternoon)}</span></div>` : ''}
-                                ${dayData.night ? `<div class="period"><span class="period-label">🌙 Night:</span> <span class="weather-symbol">${formatWeatherSymbol(dayData.night)}</span></div>` : ''}
+                                ${dayData.morning ? `<div class="period"><span class="period-label">Morning:</span> <span class="weather-symbol">${formatWeatherSymbol(dayData.morning)}</span></div>` : ''}
+                                ${dayData.afternoon ? `<div class="period"><span class="period-label">Afternoon:</span> <span class="weather-symbol">${formatWeatherSymbol(dayData.afternoon)}</span></div>` : ''}
+                                ${dayData.night ? `<div class="period"><span class="period-label">Night:</span> <span class="weather-symbol">${formatWeatherSymbol(dayData.night)}</span></div>` : ''}
                             </div>
                         </div>
                     `;
@@ -473,36 +473,36 @@ function generateHTML(forecast) {
 
 function formatWeatherSymbol(symbolCode) {
   const symbolMap = {
-    'clearsky': 'Clear sky',
-    'fair': 'Fair',
-    'partlycloudy': 'Partly cloudy',
-    'cloudy': 'Cloudy',
-    'rainshowers': 'Rain showers',
-    'rainshowersandthunder': 'Rain showers and thunder',
-    'sleetshowers': 'Sleet showers',
-    'snowshowers': 'Snow showers',
-    'rain': 'Rain',
-    'heavyrain': 'Heavy rain',
-    'heavyrainandthunder': 'Heavy rain and thunder',
-    'sleet': 'Sleet',
-    'snow': 'Snow',
-    'snowandthunder': 'Snow and thunder',
-    'fog': 'Fog',
-    'sleetshowersandthunder': 'Sleet showers and thunder',
-    'snowshowersandthunder': 'Snow showers and thunder',
-    'rainandthunder': 'Rain and thunder',
-    'sleetandthunder': 'Sleet and thunder',
-    'lightrainshowers': 'Light rain showers',
-    'heavyrainshowers': 'Heavy rain showers',
-    'lightsleetshowers': 'Light sleet showers',
-    'heavysleetshowers': 'Heavy sleet showers',
-    'lightsnowshowers': 'Light snow showers',
-    'heavysnowshowers': 'Heavy snow showers',
-    'lightrain': 'Light rain',
-    'lightsleet': 'Light sleet',
-    'heavysleet': 'Heavy sleet',
-    'lightsnow': 'Light snow',
-    'heavysnow': 'Heavy snow'
+    'clearsky': '☀️ Clear sky',
+    'fair': '🌤️ Fair',
+    'partlycloudy': '⛅ Partly cloudy',
+    'cloudy': '☁️ Cloudy',
+    'rainshowers': '🌦️ Rain showers',
+    'rainshowersandthunder': '⛈️ Rain showers and thunder',
+    'sleetshowers': '🌨️ Sleet showers',
+    'snowshowers': '🌨️ Snow showers',
+    'rain': '🌧️ Rain',
+    'heavyrain': '🌧️ Heavy rain',
+    'heavyrainandthunder': '⛈️ Heavy rain and thunder',
+    'sleet': '🌨️ Sleet',
+    'snow': '❄️ Snow',
+    'snowandthunder': '⛈️ Snow and thunder',
+    'fog': '🌫️ Fog',
+    'sleetshowersandthunder': '⛈️ Sleet showers and thunder',
+    'snowshowersandthunder': '⛈️ Snow showers and thunder',
+    'rainandthunder': '⛈️ Rain and thunder',
+    'sleetandthunder': '⛈️ Sleet and thunder',
+    'lightrainshowers': '🌦️ Light rain showers',
+    'heavyrainshowers': '🌧️ Heavy rain showers',
+    'lightsleetshowers': '🌨️ Light sleet showers',
+    'heavysleetshowers': '🌨️ Heavy sleet showers',
+    'lightsnowshowers': '🌨️ Light snow showers',
+    'heavysnowshowers': '🌨️ Heavy snow showers',
+    'lightrain': '🌦️ Light rain',
+    'lightsleet': '🌨️ Light sleet',
+    'heavysleet': '🌨️ Heavy sleet',
+    'lightsnow': '❄️ Light snow',
+    'heavysnow': '❄️ Heavy snow'
   };
   
   return symbolMap[symbolCode] || symbolCode.replace(/([A-Z])/g, ' $1').toLowerCase();
